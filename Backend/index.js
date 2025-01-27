@@ -1,6 +1,7 @@
 const express=require('express');
 const connectDB = require('./src/Database/db');
 const userModel = require('./src/Model/userModel');
+const userrouter = require('./src/Controllers/user');
 const app=express();
 
 app.use(express.json());
@@ -16,7 +17,7 @@ app.get('/',(req,res)=>{
     res.send('Hello World');
 })
 
-
+app.use('/register',userrouter);
 
 app.listen(PORT,async()=>{
 
