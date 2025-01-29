@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
-import { RxAvatar } from 'react-avatar'
+import { IoPersonCircleSharp } from "react-icons/io5";
 import { useState } from 'react'
 import axios from 'axios'
 
@@ -144,7 +144,7 @@ export const Signup = () => {
                       className="h-full w-full object-cover rounded-full"
                     />
                   ) : (
-                    <RxAvatar className="h-8 w-8" />
+                    <IoPersonCircleSharp className='h-8 w-8' />
                   )}
                 </span>
                 <label
