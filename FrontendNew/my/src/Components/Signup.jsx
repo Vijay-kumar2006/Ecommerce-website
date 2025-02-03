@@ -5,7 +5,6 @@ import { IoPersonCircleSharp } from "react-icons/io5";
 import { useState } from 'react'
 import axios from 'axios'
 
-
 export const Signup = () => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
