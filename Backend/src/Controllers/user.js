@@ -8,15 +8,15 @@ require('dotenv').config({  path:'./src/config/.env'});
 
 const secret = process.env.private_key;
 
-userrouter.post("/create-user",async(req,res)=>{
+userrouter.post("/create-user",upload.single('file'),async(req,res)=>{
     const {name, email, password} = req.body;
     const userEmail = await userModel.findOne({email});
     if (userEmail) {
         return next(new ErrorHandler("User already exists", 400));
       }
 
-    //   const filename = req.file.filename ;
-    //   const fileUrl = path.join(filename);
+      const filename = req.file.filename ;
+      const fileUrl = path.join(filename);
    
     bcrypt.hash(password, 10,async function(err, hash) {
 
