@@ -1,8 +1,12 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const ProductForm = () => {
+   const { id } = useParams();
+   const navigate=useNavigate()
+    const isEdit = Boolean(id);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -13,6 +17,32 @@ export const ProductForm = () => {
 
   const [preview, setPreview] = useState([]);
   const [image, setImage] = useState([]);
+
+
+  useEffect(() => {
+    if (isEdit) {
+        axios
+            .get(`http://localhost:8000/api/v2/product/product/${id}`)
+            .then((response) => {
+                const p = response.data.product;
+                setName(p.name);
+                setDescription(p.description);
+                setCategory(p.category);
+                setTag(p.tags || "");
+                setPrice(p.price);
+                setStock(p.stock);
+                setEmail(p.email);
+                if (p.images && p.images.length > 0) {
+                    setPreview(
+                        p.images.map((imgPath) => `http://localhost:3000${imgPath}`)
+                    );
+                }
+            })
+            .catch((err) => {
+                console.error("Error fetching product:", err);
+            });
+    }
+}, [id, isEdit]);
 
   const handleImage = (e) => {
     const files = Array.from(e.target.files);
@@ -39,11 +69,28 @@ export const ProductForm = () => {
     image.forEach((img) => formData.append("image", img));
 
     try {
-      const res = await axios.post("http://localhost:5000/create-product", formData, {
+
+      if (isEdit) {
+        const response = await axios.put(
+            `http://localhost:8000/api/v2/product/update-product/${id}`,
+            formData,
+            {
+                headers: { "Content-Type": "multipart/form-data" },
+            }
+        );
+        if (response.status === 200) {
+            alert("Product updated successfully!");
+            navigate("/my-products");
+        }
+    }
+     else {
+        const res = await axios.post("http://localhost:3000/product/post-product", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+  
       });
+  
 
       if (res.status === 200) {
         alert("Product Added Successfully");
@@ -59,7 +106,8 @@ export const ProductForm = () => {
         setImage([]);
         setPreview([]);
       }
-    } catch (error) {
+    } 
+  } catch (error) {
       console.error("Error adding product:", error);
       alert("Failed to add product");
     }
