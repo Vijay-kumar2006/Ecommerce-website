@@ -2,7 +2,8 @@ const {Router} = require('express');
 const { productupload } = require('../../multer');
 const productModel = require('../Model/Productmodel');
 const productrouter = Router();
-const path=require('path')
+const path=require('path');
+const userModel = require('../Model/userModel');
 
 productrouter.get("/get-product", async (req, res) => {
     try{
@@ -34,6 +35,37 @@ productrouter.get("/get-product", async (req, res) => {
         console.log(err);
     }
 });
+
+productrouter.post('/cart', async(req,res)=>{
+    const {email, productid, quantity, productName} = req.body;
+    try{
+        if(!email){
+            return res.status(404).json({message:"Please fill all the fields"});
+        }
+        const findemail = await userModel.findOne({email:email});
+        if(!findemail){
+            return res.status(404).json({message:"Email not found"});
+            }
+            if(!mongoose.types.objectId.isvalid(productid)){
+                return res.status(404).json({message:"Invalid product id"});
+            }
+            if(!quantity && quantity<0){
+                return res.status(404).json({message:"you dont have enough quantity"});
+                }
+        const findproduct = await productModel.findById(productid);
+        if(!findproduct){
+            return res.status(404).json({message:"Product not found"});
+    }
+    const cartProduct = await userModel.cart.findIndex((i)=>{
+        return i.productid === productid
+    })
+
+    
+}
+    catch(err){
+        console.log(err);
+    }
+})
 
 productrouter.post("/post-product",productupload.array('files'),async(req, res) => {
     const {name, description, category, tags, price, stock, email} = req.body;
