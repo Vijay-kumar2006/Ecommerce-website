@@ -56,11 +56,17 @@ productrouter.post('/cart', async(req,res)=>{
         if(!findproduct){
             return res.status(404).json({message:"Product not found"});
     }
-    const cartProduct = await userModel.cart.findIndex((i)=>{
+    const cartProduct = await findemail.cart.findIndex((i)=>{
         return i.productid === productid
     })
+    if(cartProduct>-1){
+        findemail.cart[cartProduct].quantity+=quantity;
+    }
+    else{
+        findemail.cart.push({productid, productName, quantity});
 
-    
+    }
+
 }
     catch(err){
         console.log(err);
