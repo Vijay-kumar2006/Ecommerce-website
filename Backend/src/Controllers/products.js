@@ -73,6 +73,26 @@ productrouter.post('/cart', async(req,res)=>{
     }
 })
 
+productrouter.get("/getcart", async(req, res)=>{
+    try{
+    const {email} = req.body;
+    if(!email){
+        return res.status(404).json({message:"user does not exist"});
+    }
+    const user = await userModel.findOne({email:email}).populate({
+        path: 'cart.productid',
+        model:productModel
+    })
+
+    if(!user){
+        return res.status(404).json({message:"User not found"});
+    }
+}
+catch(err){
+    console.log(err);
+}
+})
+
 productrouter.post("/post-product",productupload.array('files'),async(req, res) => {
     const {name, description, category, tags, price, stock, email} = req.body;
     const images = req.files.map((file) => file.path);
