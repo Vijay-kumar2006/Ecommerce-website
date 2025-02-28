@@ -4,6 +4,8 @@ const productModel = require('../Model/Productmodel');
 const productrouter = Router();
 const path=require('path');
 const userModel = require('../Model/userModel');
+const { equal } = require('assert');
+const { promises } = require('readline');
 
 productrouter.get("/get-product", async (req, res) => {
     try{
@@ -13,8 +15,10 @@ productrouter.get("/get-product", async (req, res) => {
             return res.status(400).json({message:"No products found"});
         }
         const products = productfind.map((product) => {
+
             return {
                 id: product._id,
+                
                 name: product.name,
                 description: product.description,
                 category: product.category,
@@ -91,6 +95,31 @@ productrouter.get("/getcart", async(req, res)=>{
 catch(err){
     console.log(err);
 }
+})
+
+productrouter.put('/edit-cart', async(req, res)=>{
+    const {email, productid, quantity} = req.body;
+
+    if(!email|| !productid||!quantity==undefined){
+        return res.status(404).json({message:"put all the details"});
+        }
+        const findemail = await userModel.findOne({email:email})
+        if(!finduser){
+            return res.status(404).json({message:"User is not found"});
+            }
+        const findproduct = await productModel.findOne({_id: productid})
+        if(!findproduct || findproduct.stock<=0){
+            return res.status(404).json({message:"Product is not found or out of stock"})
+            }
+
+    const findcartproduct=finduser.cart.find(item=>item.productid===productid)
+
+    if(!findcartproduct){
+        return res.status(404).json({message:"Product is not in cart"});
+    }
+    finduser.quantity = quantity = quantity;
+finduser.save()
+    return res.status(200).json({message:"product updated"})
 })
 
 productrouter.post("/post-product",productupload.array('files'),async(req, res) => {
