@@ -65,6 +65,38 @@ userrouter.post("/login",async(req,res)=>{
         }
     });
 
+    userrouter.get('/profile',async (req,res) => {
+        const {email} = req.query;
+        if(!email){
+            return res.status(400).json({message:"email cannot be empty!"})
+        }
+    
+        try{
+        const user = await userModel.findOne({email:email});
+    
+        if(!user){
+            return res.status(404).json({message:"The user was not found"});
+        }
+    
+        const Users = {
+            name: user.name,
+            email: user.email,
+            phone: user.phoneNumber,
+            image: user.avatarurl,
+            address: user.address
+        }
+    
+        res.status(200).json({message:"successfully recieved"});
+    }
+    
+    catch(err){
+        res.status(500).json(error:err);
+    }
+    })
+    
+    
+    
+
 })
 
 module.exports = userrouter;

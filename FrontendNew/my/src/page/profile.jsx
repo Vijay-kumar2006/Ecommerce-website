@@ -1,22 +1,35 @@
-import react from 'react';
+import React, { useEffect, useState } from 'react'
+import { fetchUserProfile } from './FetchUserProfile';
 
-import { useState, useEffect } from 'react';
+function Profile() {
+    const [Details, setDetails] = useState({});
+    const [Address,setAddress] = useState([]);
 
-
-export default function profile() {
-    const [personalsetails, setPersonalDetails] = useState({});
-    const [address, setAddress] = useState({});
-
-    useEffect(()=>{
-        fetchuserProfile("dcdc@gamil.com")
-        .then((data)=>{
-            setPersonalDetails(data.user);
-            setAddress(data.address);
+    useEffect(() => {
+        fetchUserProfile("xyz@gmail.com").then((data)=>{
+            if(data){
+                setDetails(data.user);
+                setAddress(data.address)
+            }
         })
-    },  [])
-    return (
-        <div className='w-full h-max flex flex-col sm:flex-row p-5 gap-16'>
-            <div className='w-full sm:w-1/2 p-5 bg-white rounded-md'>
-            <div className=''></div>
-            </div>
+    },[])
+
+
+return (
+    <div>
+        <div>
+            <h1>Profile</h1>
+            <img src={Details.avatarurl}/>
         </div>
+        <div>
+            <h2>{Details.name}</h2>
+            <p>{Details.email}</p>
+            <p>{Details.phone}</p>
+        </div>
+        <div>
+            <p>{Details.address}</p>
+        </div>
+    </div>
+  )
+}
+export default Profile
