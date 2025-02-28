@@ -1,27 +1,7 @@
-For Milestone  13
+By the end of this milestone, you will:
 
+How to write an endpoint that delete the product with specific ID from MongoDB.
+Steps for Milestone 14
+Write an endpoint that will Delete the data form MongoDB using ID. In frontend we will add an delete button to the product card. When click on delete button we will send the product id to server endpoint.
 
- Steps for Milestone 13:
-
-Create an Endpoint for Updating Data
-
-
-Write a PUT endpoint in the backend to update existing data in MongoDB.
-
-This endpoint will receive the updated data from the frontend and modify the corresponding document in the database.
-
-Frontend: Add an Edit Button
-
-Each product card will have an Edit button.
-
-When the Edit button is clicked:
-
-Fetch the existing data from the database using the product ID.
-
-Populate the form fields with the fetched data to allow users to edit it.
-
-Save and Update the Data
-
-After editing, allow users to submit the form.
-
-Send the updated data to the PUT endpoint to update it in MongoDB.
+Note:- This lesson will help you in understanding how to perform delete operation in detailed.
