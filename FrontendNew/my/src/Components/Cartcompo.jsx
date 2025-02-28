@@ -28,7 +28,7 @@ export default function CartProduct({ _id, email, images, quantity, price }) {
         updateQuantityVal(newquantityVal);
     };
     const updateQuantityVal = (quantity) => {
-        fetch('http://localhost:8000/api/v2/product/cartproduct/quantity', {
+        fetch('http://localhost:3000/product/edit-cart', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -104,4 +104,3 @@ return (
         </div>
     );
 }
-

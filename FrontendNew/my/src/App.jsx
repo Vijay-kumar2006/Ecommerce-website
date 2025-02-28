@@ -7,6 +7,7 @@ import { ProductForm } from './Components/Productform'
 import { Productcardseller } from './Components/productcardforseller'
 import Navbar from "./Components/Navbar";
 import Singlecard from './Components/Singlecard'
+import CartProduct from './Components/Cartcompo'
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Route path="/Login" element={<Login/>}/>
       <Route path="/Signup" element={<Signup/>}/>
      <Route path='/productform' element={<ProductForm/>}/>
+     <Route path='/cart' element={<CartProduct/>}/>
      <Route path='/my-product' element={<Productcardseller/>}/>
      <Route path= '/product/:id' element={<Singlecard/>}/>
      
