@@ -4,6 +4,8 @@ const productModel = require('../Model/Productmodel');
 const productrouter = Router();
 const path=require('path');
 const userModel = require('../Model/userModel');
+const { equal } = require('assert');
+const { promises } = require('readline');
 
 productrouter.get("/get-product", async (req, res) => {
     try{
@@ -13,8 +15,10 @@ productrouter.get("/get-product", async (req, res) => {
             return res.status(400).json({message:"No products found"});
         }
         const products = productfind.map((product) => {
+
             return {
                 id: product._id,
+                
                 name: product.name,
                 description: product.description,
                 category: product.category,
@@ -92,6 +96,61 @@ catch(err){
     console.log(err);
 }
 })
+
+productrouter.put('/edit-cart',async(req,res)=>{
+    const {email,productid,quantity}=req.body
+    try{
+    
+    if(!email||!productid||quantity==undefined){
+     return res.status(404).json({message:"put all details"})
+    }
+    const finduser=await userModel.findOne({email:email})
+    if(!finduser){
+     return res.status(500).json({message:"user is not found"})
+    }
+ 
+    const findproduct=await Productmodel.findOne({_id:productid})
+    if(!findproduct||findproduct.stock<=0){
+     return res.status(404).json({message:"product not avzailable"})
+    }
+   
+    const findcartproduct=finduser.cart.find(item=>item.productid===productid)
+ 
+    if(!findcartproduct){
+     return res.status(404).json({message:"can not find"}) 
+    }
+    findcartproduct.quantity=quantity
+    await finduser.save()
+    return res.status(200).json({message:"edited successfully"})
+ }
+ catch(err){
+     console.log(err)
+ }
+ })
+
+//  profilerouter.get('/get-profile', async(req,res)=>{
+//     const {email}=req.body
+//     const userId = await userModel.findOne({email:email})
+//     try{
+//     if(!email){
+//         return res.status(404).json({message:"email is required"})
+//     }
+
+//     if(!user){
+//         return res.status(404).json({message:"User not found"});
+//     }
+    
+//     return res.status(200).json({email})
+//     return (
+//         name: userId.name,
+//         email: userId.email,
+//         password : userId.password,
+//     )
+//     } catch(err){
+//         console.log(err);
+//     }})
+
+
 
 productrouter.post("/post-product",productupload.array('files'),async(req, res) => {
     const {name, description, category, tags, price, stock, email} = req.body;

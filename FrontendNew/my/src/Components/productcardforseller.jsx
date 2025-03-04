@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 
-
 export const Productcardseller = ({image,name,price,description}) => {
 
   const {currentindex, setcurrentindex} =useState(0);

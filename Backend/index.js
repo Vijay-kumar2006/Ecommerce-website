@@ -4,7 +4,12 @@ const userModel = require('./src/Model/userModel');
 const productModel = require('./src/Model/Productmodel');
 const userrouter = require('./src/Controllers/user');
 const productrouter = require('./src/Controllers/products');
+const cors = require('cors');
+
+
 const app=express();
+
+app.use(cors())
 
 app.use(express.json());
 
@@ -18,6 +23,8 @@ const url=process.env.db_url;
 app.get('/',(req,res)=>{   
     res.send('Hello World');
 })
+
+
 
 app.use('/auth',userrouter);
 
