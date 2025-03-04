@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import {useNavigate} from "react-router-dom"
 import axios from 'axios';
 
 const AddressForm = () => {
+  const navigate = useNavigate();
   const [address, setAddress] = useState('');
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
@@ -12,7 +14,7 @@ const AddressForm = () => {
     e.preventDefault();
     const addressdetails = { address:address, country: country, city:city, state:state, zip:zip };
     axios.post('http://localhost:3000/api/addresses', addressdetails)
-      .then(res => console.log(res))
+      .then(res => console.log(res)) navigate("/profile");
       .catch(err => console.log(err));
   };
 
