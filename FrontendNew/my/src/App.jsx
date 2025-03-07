@@ -8,6 +8,7 @@ import { Productcardseller } from './Components/productcardforseller'
 import Navbar from "./Components/Navbar";
 import Singlecard from './Components/Singlecard'
 import CartProduct from './Components/Cartcompo'
+import { Selectaddress } from './Components/selectaddress'
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
      <Route path='/cart' element={<CartProduct/>}/>
      <Route path='/my-product' element={<Productcardseller/>}/>
      <Route path= '/product/:id' element={<Singlecard/>}/>
+     <Route path = 'selcetaddress' element={<Selectaddress/>}/>
      
     </Routes>
     </>
