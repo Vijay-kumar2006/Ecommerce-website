@@ -44,7 +44,7 @@ const OrderConfirmation = () => {
                     _id: item.productId._id,
                     name: item.productId.name,
                     price: item.productId.price,
-                    images: item.productId.images.map(imagePath => http://localhost:3000${imagePath}),
+                    images: item.productId.images.map(imagePath => `http://localhost:3000${imagePath}`),
                     quantity: item.quantity,
                 }));
                 setCartItems(processedCartItems);
