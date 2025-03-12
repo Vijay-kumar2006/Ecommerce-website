@@ -1,14 +1,13 @@
-Milestone 18: Cart Page & Fetching Cart Products  
+Milestone 19: Enhancing Cart Functionality
+🎯 Learning Goals
+By the end of this milestone, you will:
 
- Overview  
-In this milestone, we created a backend endpoint to handle requests from the cart page and fetch all products inside the cart for a specific user.  
+Create a cart page that displays products using the endpoint built in Milestone 18.
+Add an option for each product to increase or decrease quantity using + and - buttons.
+Develop an API endpoint to handle quantity updates.
 
- Steps Completed  
+📝 Steps for Milestone 19
 
-1. **Backend Endpoint for Cart Page:**  
-   - Created an endpoint to receive requests from the cart page.  
-   - Handled adding, removing, and updating cart items.  
-
-2. **Fetching Cart Products:**  
-   - Developed an endpoint to retrieve all products inside a user's cart.  
-   - Included user email in the response to associate the cart with the correct user.  
+Create the Cart Frontend Page – Display products inside the cart using the existing API endpoint.
+Implement Quantity Controls – Add + and - buttons for each product to adjust the quantity.
+Build Backend Endpoints – Develop API endpoints to update product quantities dynamically.
