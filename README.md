@@ -1,3 +1,15 @@
+
+ Milestone 17 and 18: Implementing Cart Functionality
+🎯 Learning Goals
+By the end of this milestone, you will:
+
+Modify the user schema to store cart products.
+Write an API endpoint to receive product details and store them in the database.
+📝 Steps for Milestone 17
+Create the Cart Schema – Define a schema to store products in the cart.
+Implement an API Endpoint – Develop an endpoint to receive product details and save them in the database.
+This lesson will guide you through the process of creating cart functionality, enabling users to add and manage products in their cart effectively.
+
 ## Milestone 18: Cart Page & Quantity Management  
 
 ### Overview  
