@@ -1,27 +1,13 @@
+Steps for Milestone 21
 
-Steps for Milestone 21 📝
-Frontend:
+Backend:
 
-1️⃣ Create an address form page.
+1️⃣ Create an API endpoint to receive the address from the frontend form.
 
-2️⃣ Add input fields for:
+2️⃣ Validate and process the received address data.
 
-Country
+3️⃣ Add the new address to the address array inside the user collection in the database.
 
-City
-
-Address Line 1
-
-Address Line 2
-
-Zip Code
-
-
-Address Type (e.g., Home, Office)
-
-3️⃣ Store the entered address in a state.
-
-4️⃣ When clicking "Add Address" on the profile page, navigate to this form page.
-
+4️⃣ Ensure the database is updated successfully with the new address.
 
 
