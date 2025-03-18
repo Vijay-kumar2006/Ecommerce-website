@@ -11,15 +11,17 @@ const auth=async(req, res, next)=>{
     jwt.verify(token, secret, function(err, decoded) {
   if (err) {``
     
-      err = {
+      
         // name: 'TokenExpiredError',
         // message: 'jwt expired',
         // expiredAt: 1408621000
-        consloe.log('error in with middleware', err);
-      }
+        console.log('error in with middleware', err);
+      
       
     }
     else{
+      const finduser= decoded.email;
+      req.user=finduser;
       next();
     }
 });

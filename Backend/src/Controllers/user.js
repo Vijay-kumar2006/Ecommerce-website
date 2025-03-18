@@ -104,7 +104,7 @@ userrouter.post("/login",async(req,res)=>{
         try{
 
            
-                const [country, city, address1, address2, zipCode, addressType] = req.body;
+                const [country, city, address1, address2, zipCode, addressType] = req.user;
             
         const user = await userModel.findOne({email:email});
 
@@ -132,7 +132,23 @@ userrouter.post("/login",async(req,res)=>{
     }
     })
     
-    
+    userrouter.get('/get-address',auth,async(req,res)=>{
+        const email=req.user
+        try{
+         const user=await userModel.findOne({email:email})
+         if(!user){
+             return res.status(400).json({message:"User not found"})
+         }   
+         res.status(200).json({message:"successfully recieved",user:user.addresses
+         })
+        }
+        catch(err){
+              console.log("error in get address",err)    
+        }
+     
+     
+     
+     })
     
 
 })
