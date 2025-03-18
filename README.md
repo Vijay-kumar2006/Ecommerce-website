@@ -1,13 +1,18 @@
-Steps for Milestone 21
+
+Frontend:
+
+1️⃣ Add a "Place Order" button inside the cart page.
+
+2️⃣ When clicked, navigate to the Select Address page.
+
+3️⃣ Display all saved addresses and provide an option to select one.
+
 
 Backend:
 
-1️⃣ Create an API endpoint to receive the address from the frontend form.
+4️⃣ Create an API endpoint to fetch and return all addresses of the user.
 
-2️⃣ Validate and process the received address data.
+5️⃣ Define a Mongoose schema to store order details in the database.
 
-3️⃣ Add the new address to the address array inside the user collection in the database.
-
-4️⃣ Ensure the database is updated successfully with the new address.
 
 
