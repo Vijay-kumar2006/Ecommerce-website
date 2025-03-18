@@ -1,3 +1,4 @@
+
 Frontend:
 
 1️⃣ Add a "Place Order" button inside the cart page.
@@ -12,4 +13,6 @@ Backend:
 4️⃣ Create an API endpoint to fetch and return all addresses of the user.
 
 5️⃣ Define a Mongoose schema to store order details in the database.
+
+
 
