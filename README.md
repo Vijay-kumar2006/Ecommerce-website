@@ -1,3 +1,4 @@
+
 Steps for Milestone 21 📝
 Frontend:
 
@@ -21,3 +22,6 @@ Address Type (e.g., Home, Office)
 3️⃣ Store the entered address in a state.
 
 4️⃣ When clicking "Add Address" on the profile page, navigate to this form page.
+
+
+

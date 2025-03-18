@@ -128,27 +128,6 @@ productrouter.put('/edit-cart',async(req,res)=>{
  }
  })
 
-//  profilerouter.get('/get-profile', async(req,res)=>{
-//     const {email}=req.body
-//     const userId = await userModel.findOne({email:email})
-//     try{
-//     if(!email){
-//         return res.status(404).json({message:"email is required"})
-//     }
-
-//     if(!user){
-//         return res.status(404).json({message:"User not found"});
-//     }
-    
-//     return res.status(200).json({email})
-//     return (
-//         name: userId.name,
-//         email: userId.email,
-//         password : userId.password,
-//     )
-//     } catch(err){
-//         console.log(err);
-//     }})
 
 
 

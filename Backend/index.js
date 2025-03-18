@@ -39,6 +39,6 @@ catch(err){
 }
     
 })
-
+app.use('order', orderrouter);
 app.use('/auth',userrouter);
 app.use('/product',productrouter);
