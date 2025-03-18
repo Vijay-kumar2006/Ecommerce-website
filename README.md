@@ -1,14 +1,15 @@
-Milestone 18: Cart Page & Fetching Cart Products  
+Frontend:
 
- Overview  
-In this milestone, we created a backend endpoint to handle requests from the cart page and fetch all products inside the cart for a specific user.  
+1️⃣ Add a "Place Order" button inside the cart page.
 
- Steps Completed  
+2️⃣ When clicked, navigate to the Select Address page.
 
-1. **Backend Endpoint for Cart Page:**  
-   - Created an endpoint to receive requests from the cart page.  
-   - Handled adding, removing, and updating cart items.  
+3️⃣ Display all saved addresses and provide an option to select one.
 
-2. **Fetching Cart Products:**  
-   - Developed an endpoint to retrieve all products inside a user's cart.  
-   - Included user email in the response to associate the cart with the correct user.  
+
+Backend:
+
+4️⃣ Create an API endpoint to fetch and return all addresses of the user.
+
+5️⃣ Define a Mongoose schema to store order details in the database.
+
