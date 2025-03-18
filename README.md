@@ -1,14 +1,17 @@
-Milestone 18: Cart Page & Fetching Cart Products  
+By the end of this milestone, users will be able to cancel their placed orders from the My Orders page.
 
- Overview  
-In this milestone, we created a backend endpoint to handle requests from the cart page and fetch all products inside the cart for a specific user.  
+Steps to Implement
+Add a "Cancel Order" button for each order on the My Orders page.
+If the order is already canceled, do not display the button.
+Create an endpoint that receives the order ID.
+Retrieve the order using this ID, update its status to "Canceled," and save the changes.
+Ensure the frontend updates accordingly after a successful cancellation.
+Expected Outcome
+Users can cancel their orders, and canceled orders will no longer display the cancel button.
 
- Steps Completed  
 
-1. **Backend Endpoint for Cart Page:**  
-   - Created an endpoint to receive requests from the cart page.  
-   - Handled adding, removing, and updating cart items.  
 
-2. **Fetching Cart Products:**  
-   - Developed an endpoint to retrieve all products inside a user's cart.  
-   - Included user email in the response to associate the cart with the correct user.  
+
+
+
+
