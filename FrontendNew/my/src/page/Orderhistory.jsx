@@ -81,7 +81,7 @@ import React, { useState, useEffect } from 'react';
                                              <p>
                                                  {order.shippingAddress.address1}
                                                  {order.shippingAddress.address2 &&
-                                                     , ${order.shippingAddress.address2}}
+                                                      ${order.shippingAddress.address2}}
                                              </p>
                                              <p>
                                                  {order.shippingAddress.city}, {order.shippingAddress.zipCode}
