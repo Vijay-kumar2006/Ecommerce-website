@@ -1,3 +1,4 @@
+
 # Ecommerce-website
 # S67_Ecommerce_Website
 
@@ -19,3 +20,4 @@ In this project we will do an Ecommerce website. Where Frontend will be made wit
 
 We make a Home page where we have product and search bar, filter option and cart option. And in the cart page we have products and total price of the products. In the Payment page we have the payment summary and paymnet things, 
 and the user will have the invoice and tax bill. 
+
