@@ -25,8 +25,8 @@ function App() {
      <Route path='/cart' element={<CartProduct/>}/>
      <Route path='/my-product' element={<Productcardseller/>}/>
      <Route path= '/product/:id' element={<Singlecard/>}/>
-     <Route path = 'selcetaddress' element={<SelectAddress/>}/>
-     <Route path ='orderconfirmation' element ={<OrderConfirmation/>}/>
+     <Route path = '/selcetaddress' element={<SelectAddress/>}/>
+     <Route path ='/orderconfirmation' element ={<OrderConfirmation/>}/>
      
     </Routes>
     </>
