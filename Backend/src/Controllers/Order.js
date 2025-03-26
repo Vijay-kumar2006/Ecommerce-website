@@ -1,6 +1,9 @@
 const {Router} = require('express');
-const orederrouter= Router();
-const user=require('../Model/userModel')
+const orderrouter= Router();
+const user=require('../Model/userModel');
+const { error } = require('node:console');
+
+
 orderrouter.post('/place', auth ,async(req,res)=>{
     try{
         const {email} = req.user
@@ -18,17 +21,30 @@ orderrouter.post('/place', auth ,async(req,res)=>{
         if(!user){
             return res.status(400).json({message:"User not found"});
         }
-        const orderpromise = orderItems.map(async(item)=>{
-            const totalAmount = item.price*item.quantity;
-            const order = new orders({
-                userId:user._id,
-                orderItems :[item],
-                shippingAddress,
-                totalAmount
-            });
-            return order.save();
+
+        const totalAmount = orderItems.reduce((sum, item)=> sum + item.price*item.quantity, 0);
+
+        const paymentData = {
+            intent:'sale',
+            payer:{payment_method: 'paypal'},
+            transactions: [{amount: {total : totalAmount.tofixed(2), currency:"INR"}}],
+            redirect_urls:{return_url: 'http://localhost:3000/success', cancel_url:'http://localhost:3000/cancel'}
+        }
+
+        paypal. payment.create(paymentData,async(err,payment)=>{
+            const orderpromise = orderItems.map(async(item)=>{
+                const order = new orders({
+                    userId:user._id,
+                    orderItems :[item],
+                    shippingAddress,
+                    totalAmount,
+                    paymentId:payment.id
+                });
+                return order.save();
+            })
+            const orders = await Promise.all(orderpromise);
         })
-        const orders = await Promise.all(orderpromise);
+        
         const arr = user.cart
         arr.splice(0, arr.length)
         res.status(201).json({message:'orders place and cart cleared successfully', orders});
@@ -80,4 +96,23 @@ orderrouter.patch('/cancel-order/:orderId', auth, async(req, res)=>{
     }
 });
 
+orderrouter('/verify-payment', auth, async(req, res)=>{
+    try{
+        const {orderId} = req.params;
+       paypal.payment.get(orderId, async(error, payment)=>{
+        if(error){
+            console.log(error)
+            return res.status(404).json({message:'payment not found'})
+        }
+        if(payment.status !== 'approved'){
+            return res.status(400).json({message:'payment not approved'})
+        }
+        await orders .findByIdAndUpdate(orderId, {orderStatus:['paid']})
+       }
+    )
+
+    }catch(err){
+        console.log(err)
+    }
+})
 module.exports=orderrouter;

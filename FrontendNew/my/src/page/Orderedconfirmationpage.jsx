@@ -166,8 +166,19 @@ const OrderConfirmation = () => {
                                   createOrder={(data,actions)=>{
                                      return actions.order.create({purchase_units:[{amaount:{value:totalPrice.toFixed(2)}}]})
                                   }}
-                                  onApprove={(data,actions)=>{
-                                     return actions.order.capture()
+                                  onApprove={async(data,actions)=>{
+                                     const order1= actions.order.capture()
+                                     try{
+                                     const response = await axios.post('http://localhost:3000/api/verify-payment', {orderId :order1.id })
+                                     
+                                     if(response.data.success){
+                                        onsuccess()
+                                     }
+                                    }
+                                     catch(err){
+                                        console.log(err)
+                                     }
+                                     
                                   }}
                               >Pay with paypal </PayPalButtons>
                          </PayPalScriptProvider>
