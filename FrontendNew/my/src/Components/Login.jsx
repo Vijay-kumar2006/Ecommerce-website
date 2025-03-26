@@ -1,76 +1,76 @@
-import './login.css';
+import React, { useState } from 'react'
+import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai'
 
-export default function Example() {
+import { useDispatch } from 'react-redux'
+import { loginuser } from '../Redux/action'
+export const Login = () => {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [visible, setVisible] = useState(false)
+
+ const dispatch=useDispatch()
+
+  const handleclick=()=>{
+    dispatch(loginuser({email,password}))
+  }
   return (
-    <>
-      <div className="container">
-        <div className="logo-section">
-          <img
-            alt="Your Company"
-            src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-            className="logo"
-          />
-          <h2 className="header">Sign in to your account</h2>
-        </div>
-
-        <div className="form-section">
-          <form action="#" method="POST" className="form">
-            <div>
-              <label htmlFor="email" className="label">
-                Email address
-              </label>
-              <div className="input-container">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  autoComplete="email"
-                  className="input"
-                  placeholder="Enter your email"
-                />
-              </div>
+    <div>
+        <div className="flex justify-center items-center h-screen bg-gray-200">
+            <div className="bg-white p-16 rounded-lg shadow-2xl w-96">
+            <h2 className="text-3xl font-bold mb-10 text-center">Login</h2>
+            <div className="mb-4">
+                <label htmlFor="email" className="block text-gray-600">Email</label>
+                <input type="email"
+                 id="email" 
+                 className="w-full border-2 border-gray-300 p-3 rounded outline-none focus:border-purple-500" 
+                 autoComplete='on'
+                 value={email} 
+                onChange={(e) => setEmail(e.target.value)}
+                required />
             </div>
 
-            <div>
-              <div className="password-container">
-                <label htmlFor="password" className="label">
-                  Password
-                </label>
-                <div className="forgot-password">
-                  <a href="#" className="link">
-                    Forgot password?
-                  </a>
+
+            <div className="mb-4">
+                <label htmlFor="password" className="block text-gray-600">Password</label>
+                <div className="relative">
+                <input type={visible ? "text" : "password"} id="password" className="w-full border-2 border-gray-300 p-3 rounded outline-none focus:border-purple-500" 
+                value={password} 
+
+                onChange={(e) => setPassword(e.target.value)} 
+                required/>
+
+              {
+                visible ?
+                <AiOutlineEyeInvisible className="absolute top-4 right-4 text-gray-500 cursor-pointer" 
+                onClick={() => setVisible(false)} 
+                size={25}/>:
+                <AiOutlineEye className="absolute top-4 right-4 text-gray-500 cursor-pointer" 
+                onClick={() => setVisible(true)}
+                size={25} />
+              }
+
+
+                 
+                </div>
+            </div>
+              <div className="setting-container">
+                <div className='remember'>
+                    <input type="checkbox"/>
+                    <label>Remember me!</label>
+                </div>
+                <div>
+                <div className='forgot-password'>
+                <a href="">Forgot Password</a>
+                </div>
                 </div>
               </div>
-              <div className="input-container">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  autoComplete="current-password"
-                  className="input"
-                  placeholder="Enter your password"
-                />
-              </div>
-            </div>
+            <button className="w-full bg-purple-500 text-white p-3 rounded hover:bg-purple-600" onClick={handleclick}>Login</button>
 
-            <div className="flex justify-center space-x-4 px-4">
-              <button type="submit" className="submit-button">
-                Sign in
-              </button>
-              <button type="submit" className="submit-button">
-                Sign up
-              </button>
+            <div className='newUser'>
+              <p>Not a user? <a href="">Create an account</a></p>
             </div>
-          </form>
-
-          <p className="footer-text">
-            <a href="#">Need help?</a>
-          </p>
+            </div>
         </div>
-      </div>
-    </>
-  );
+    </div>
+  )
 }
