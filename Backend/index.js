@@ -5,7 +5,7 @@ const userrouter = require('./src/Controllers/users');
 const productrouter = require('./src/Controllers/products');
 const orderrouter = require('./src/Controllers/Order');
 const app = express();
-
+const cookieparser = require('cookie-parser')
 app.use(express.json());
 app.use(cors())
 
@@ -23,6 +23,8 @@ app.get('/', (req, res) => {
 app.use('/order',orderrouter)
 app.use('/auth', userrouter);
 app.use('/product', productrouter);
+
+
 
 app.listen(PORT, async () => {
     try {

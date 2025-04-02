@@ -1,129 +1,160 @@
-const {Router}=require('express');
-const auth = require('../Middleware/auth');
-const user=require("../model/userModel");
-const orders = require('../Model/OrderSchema');
-const rolemiddleware = require('../Middleware/role');
-const orderrouter=Router()
+const {Router}= require("express");
+const userModel = require("../Model/userModel");
+const { upload } = require("../../multer");
+const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
+const userrouter = Router();
+const AsyncError = require('../Middleware/catchAsyncError');
+const auth = require("../Middleware/auth");
+require('dotenv').config({  path:'./src/config/.env'});
 
-orderrouter.post('/place',auth,async(req,res)=>{
-    try {
+const secret = process.env.secretkey;
 
-        const email=req.user
-        const {  orderItems, shippingAddress } = req.body;
-
-        // Validate request data
-        if (!email) {
-            return res.status(400).json({ message: 'Email is required.' });
-        }
-        if (!orderItems || !Array.isArray(orderItems) || orderItems.length === 0) {
-            return res.status(400).json({ message: 'Order items are required.' });
-        }
-        if (!shippingAddress) {
-            return res.status(400).json({ message: 'Shipping address is required.' });
-        }
-
-        // Retrieve user _id from the user collection using the provided email
-        const user = await user.findOne({ email });
-        if (!user) {
-            return res.status(404).json({ message: 'User not found.' });
-        }
-
-        const totalAmount = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-        const paymentData = {
-          intent: "sale",
-          payer: { payment_method: "paypal" },
-          transactions: [{ amount: { total: totalAmount.toFixed(2), currency: "INR" } }],
-          redirect_urls: { return_url: "http://localhost:3000/success", cancel_url: "http://localhost:3000/cancel" },
-        };
-
-paypal.payment.create(paymentData,async(error,payment)=>{
-    const orderPromises = orderItems.map(async (item) => {
-        const order = new orders ({
-            user: user._id,
-            orderItems: [item], // Each order contains a single item
-            shippingAddress,
-            totalAmount,
-            paymentID:payment.id
-        });
-        return order.save();
-    });
-    const orders = await Promise.all(orderPromises);
-})
-        // Create separate orders for each order item
-       
-
-        
-      const arr=user.cart
-      arr.splice(0,arr.length)
-
-        res.status(201).json({ message: 'Orders placed and cart cleared successfully.', orders });
-    } catch (error) {
-        console.error('Error placing orders:', error);
-        res.status(500).json({ message: error.message });
-    }
-})
-
-
-
-orderrouter.get("/getorder",auth,async(req,res)=>{
-    try{
-      const email=req.user
-      if(!email){
-        return res.status(404).json({message:"not found "})
+userrouter.post("/create-user",upload.single('file'),async(req,res)=>{
+    const {name, email, password} = req.body;
+    const userEmail = await userModel.findOne({email});
+    if (userEmail) {
+        return next(new ErrorHandler("User already exists", 400));
       }
-     const orderhistory=await orders.find({email})
 
-     console.log(orderhistory)
-    res.status(200).json({message:"placed successfully"})
-    }
-    catch(err){
-        console.log(err)
-    }
-})
+      const filename = req.file.filename ;
+      const fileUrl = path.join(filename);
+   
+    bcrypt.hash(password, 10,async function(err, hash) {
+
+        await userModel.create({
+            name:name,
+            email:email,
+            password:hash,
+            // avatar:fileUrl
+
+        })
+
+        })
 
 
-orderrouter.patch('/cancel-order/:orderId',auth,rolemiddleware(['user']), async (req, res) => {
-    try {
-        const { orderId } = req.params;
-       
-        // Find the order by ID
-        const order = await orders.findById(orderId);
-        console.log(order);
-        if (!order) {
-            return res.status(404).json({ message: 'Order not found.' });
-        }
-
-        // Update order status to 'cancelled'
-        if(order.orderStatus==['Delivered']){
-            res.status(404).json({ message: 'Order is already delivered'});
-        }
-
-        order.orderStatus = ['Cancelled'];
-        await order.save();
-
-        res.status(200).json({ message: 'Order cancelled successfully.', order });
-    } catch (error) {
-        console.error('Error cancelling order:', error);
-        res.status(500).json({ message: error.message });
-    }
 });
 
-orderrouter('/verify-payment',auth,async(req,res)=>{
-    const {orderId}=req.user
 
-    paypal.payment.get(orderId,async(error,payment)=>{
-        if(error){
-            res.status(500).json({message:"there is error"})
+userrouter.post("/login",async(req,res)=>{
+    const {email, password} = req.body;
+    const check= await userModel.findOne({email:email});
+        console.log(check);
+    if(!check){
+        return res.status(400).json({message:"User not found"});
+    }
+
+    bcrypt.compare(password,check.password , function(err, result) {
+       
+        if(err){
+            return res.status(400).json({message:"Invalid bcrpyt compare"});
         }
-        if(payment.state!=="approved"){
-            res.status(500).json({message:"cancel payment"})
+        if(result){
+            
+            jwt.sign({email:email},secret,(err,token)=>{
+                if(err){
+                    return res.status(400).json({message:"Invalid jwt"});
+                }
+                res.cookie('autherization', token,{
+                    expires: new Date(Date.now() + 900000),
+                    httpOnly: true,
+                    domain: '.localhost.com',
+                })
+            //    res.setHeader("Autherization",`Bearer ${token}`)
+                console.log(token);
+                res.status(200).json({token:token});    
+            })
+
+
+        }   
+        else{
+            return res.status(400).json({message:"Invalid password"});
         }
-        await orders.findByIdAndUpdate(orderId,{orderStatus:['paid']})  
-    })
+    });
 
 })
 
 
+userrouter.get('/profile',async (req,res) => {
+    const {email} = req.query;
+    if(!email){
+        return res.status(400).json({message:"email cannot be empty!"})
+    }
 
-module.exports=orderrouter
+    try{
+    const user = await userModel.findOne({email:email});
+
+    if(!user){
+        return res.status(404).json({message:"The user was not found"});
+    }
+
+    const Users = {
+        name: user.name,
+        email: user.email,
+        phone: user.phoneNumber,
+        image: user.avatarurl,
+        address: user.address
+    }
+
+    res.status(200).json({message:"successfully recieved"});
+}
+
+catch(err){
+    res.status(500).json("error":err);
+}
+})
+
+
+
+
+userrouter.post('/add-address',auth, async(req,res)=>{
+
+    try{
+
+        const email=req.user
+    const {country,
+        city,
+        address1,
+        address2,   
+        zipCode,
+        addressType}=req.body
+
+        const user=await userModel.find({email:email})
+
+      const newaddress={
+        country,
+        city,
+        address1,
+        address2,
+        zipCode,
+        addressType,
+    }
+
+    user.addresses.push(newaddress)
+    await user.save()
+}
+catch(err){
+    console.log("error in address",err)
+}
+})
+
+userrouter.get('/get-address',auth,async(req,res)=>{
+   const email=req.user
+   try{
+    const user=await userModel.findOne({email:email})
+    if(!user){
+        return res.status(400).json({message:"User not found"})
+    }   
+    res.status(200).json({message:"successfully recieved",user:user.addresses
+    })
+   }
+   catch(err){
+         console.log("error in get address",err)    
+   }
+
+
+
+})
+
+
+module.exports = userrouter;
