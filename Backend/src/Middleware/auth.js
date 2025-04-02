@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 require('dotenv').config({path:'../Config/.env'})
 
 const auth=async(req,res,next)=>{
-  const tokenauth=req.headers.Autherization
+  const tokenauth=req.cookie.Autherization
   const token=tokenauth.split(' ')[1]
   const secret = process.env.secretkey;
 
